@@ -1,0 +1,14 @@
+        private static string GetCounty(string postcode)
+        {
+            string countyValue = "";
+
+            using (WebClient wc = new WebClient())
+            {
+                var json = wc.DownloadString("http://api.postcodes.io/postcodes/" + postcode);
+
+                RootObject test = JsonConvert.DeserializeObject<RootObject>(json);
+
+                countyValue = "," + test.result.region + ",\"eastings\":" + test.result.eastings + ",\"northings\":" + test.result.northings ;
+            }
+            return countyValue;
+        }
