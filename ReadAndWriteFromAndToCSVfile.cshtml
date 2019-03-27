@@ -1,0 +1,27 @@
+            List<string> listA = new List<string>();
+            listA.Clear();
+            
+            //get from csv file to list array
+            using (var reader = new StreamReader(@"C:\\Users\\test.csv"))
+            {
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(',');
+
+                    listA.Add(values[0]);
+                  
+                }
+            }
+            //Write to csv file from list
+            foreach (var item in listA)
+            {
+                string newFileName = @"C:\\Users\\DS01\\Documents\\Visual Studio 2017\\Projects\\FieldMapsConsoleApp\\test.csv";
+                string address = Environment.NewLine + item.ToString();
+              
+                    File.AppendAllText(newFileName, address);
+      
+            }
+
+
+            listA.Clear();
