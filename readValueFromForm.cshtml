@@ -1,0 +1,15 @@
+@{
+    //String.Format("{0}", Request.Form["searchMap"]);   <------ Get value from input field with Post method
+    string userID = String.Format("{0}", Request.QueryString["InterviewerID"]); //<------ Get value from input field with Get method
+    string projectNum = String.Format("{0}", Request.QueryString["ProjectNum"]);
+
+}
+
+<form action="/" method="GET">
+
+            <input type="text" name="ProjectNum" id="ProjectNum" placeholder="Project Number" />
+            <input type="text" name="InterviewerID" id="InterviewerID" placeholder="Interviewer ID" />
+
+        <input value="Load Map" type="Submit" class="btn-info" />
+
+</form>
