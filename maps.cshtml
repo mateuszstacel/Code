@@ -1,0 +1,45 @@
+<script>
+ 
+        function initMap(zoom, center) {
+            var map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 2,
+                center: { lat: 54.355518, lng: -3.7743 },
+                mapTypeId: google.maps.MapTypeId.SATELLITE
+            });
+
+            setMarkers(map);
+        }
+    var addresses = @Html.Raw(Json.Encode(address));
+
+    var stringArray = @Html.Raw(Json.Encode(geographicalCoordinates));
+        var array = JSON.parse("[" + stringArray + "]");
+
+    function setMarkers(map) {
+        
+
+        var bounds = new google.maps.LatLngBounds();
+        var counter = 0;
+
+        for (var i = 0; i < array.length; i += 2) {
+                var myLatLng = new google.maps.LatLng(array[i], array[i + 1]);
+                var marker = new google.maps.Marker({
+                    position: { lat: array[i], lng: array[i + 1] },
+                    map: map
+                });
+
+            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        var infowindow = new google.maps.InfoWindow({
+                            content: "<b>" + addresses[i] + "</b>" + "<br/>" + '<a href="https://www.google.com/maps/dir/current%20location/ ' + addresses[i] + ' ">' + '<h5 <i class="fas fa-walking"></i>𝐓𝐀𝐊𝐄 𝐌𝐄 𝐓𝐇𝐄𝐑𝐄  ➤</h5>'
+                        });
+                        infowindow.open(map, marker);
+                    }
+                })(marker, counter)); 
+
+                counter += 1;
+                bounds.extend(myLatLng);
+            }
+            map.fitBounds(bounds);
+        }
+   
+</script>
