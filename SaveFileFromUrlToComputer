@@ -1,0 +1,7 @@
+   private static void Savefile(string path)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.DownloadFile(path, @"J:\\Field\\InterviewerAppAccess\\Maps\\Individual\\"example.jpg");
+            }
+        }
