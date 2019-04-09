@@ -1,0 +1,12 @@
+MailMessage mail = new MailMessage("from", "to...");
+                SmtpClient client = new SmtpClient();
+                client.Port = 587;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = true;
+                client.Credentials = new NetworkCredential("user login", "password");
+                client.EnableSsl = true;
+                client.Host = "smtp.gmail.com";
+                //mail.To.Add("add more peoples...");
+                mail.Subject = "this is a test email.";
+                mail.Body = "this is my test email body";
+                client.Send(mail);
