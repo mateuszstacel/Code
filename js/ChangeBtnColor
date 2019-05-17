@@ -1,0 +1,52 @@
+<button class="btn btn-primary" id="ButtonId">Click me</button>
+
+<button class="btn btn-primary" id="ButtonIdd">Click me</button>
+
+<button class="btn btn-primary" id="ButtonIddd">Click me</button>
+
+<div>hey</div>
+
+<script>
+
+    var currentButton = "#ButtonId";
+    
+
+    function myFunction(btn) {
+        $(btn).addClass("btn btn-success");
+    }
+
+    function setDefaultCss(btn) {
+        $(btn).removeClass("btn btn-success");
+        $(btn).addClass("btn btn-primary");
+        }
+       
+   
+
+
+    $("#ButtonId").click(function test() {
+
+        setDefaultCss(currentButton)
+
+        currentButton = "#ButtonId"
+
+        myFunction("#ButtonId")
+      
+    });
+
+    $("#ButtonIdd").click(function test() {
+        setDefaultCss(currentButton)
+        currentButton = "#ButtonIdd"
+
+        myFunction("#ButtonIdd")
+       
+    });
+
+    $("#ButtonIddd").click(function test() {
+        setDefaultCss(currentButton)
+        currentButton = "#ButtonIddd"
+
+        myFunction("#ButtonIddd")
+      
+    });
+
+</script>
