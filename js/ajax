@@ -1,0 +1,34 @@
+//method
+
+
+
+        public string WelcomeMsg(string input)
+        {
+            if (!String.IsNullOrEmpty(input))
+                return "Please welcome " + input + ".";
+            else
+                return "Please enter your name.";
+        }
+
+
+//
+
+
+<div id="rData">
+
+
+</div>
+
+<p>
+    Enter you name @Html.TextBox("Name")
+    <input type="submit" id="SubmitName" value="Submit" />
+</p>
+<script type="text/jscript">
+    $('#SubmitName').click(function () {
+        var url = "/Home/WelcomeMsg";
+        var name = $('#Name').val();
+        $.get(url, { input: name }, function (data) {
+            $("#rData").html(data);
+        });
+    })
+</script>
