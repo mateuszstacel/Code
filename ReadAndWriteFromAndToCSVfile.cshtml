@@ -19,13 +19,20 @@ List<string> listA = new List<string>();
                 }
             }
             //Write to csv file from list
-            foreach (var item in listA)
+                using (var writer = new StreamWriter(@"CW:\\+ location"))
             {
-                string newFileName = @"C:\\Users\\DS01\\Documents\\Visual Studio 2017\\Projects\\FieldMapsConsoleApp\\test.csv";
-                string address = Environment.NewLine + item.ToString();
-              
-                    File.AppendAllText(newFileName, address);
-      
+                foreach (DataRow eachrow in LocalDataTable.Rows)
+
+                {
+                    string phone1 = eachrow["TEL1"].ToString();
+                    string phone2 = eachrow["TEL2"].ToString();
+                    string id = eachrow["ID"].ToString();
+                    var line = string.Format("{0},{1},{2}", phone1, phone2, id);
+                    writer.WriteLine(line);
+
+
+                }
+                writer.Close();
             }
 
 
