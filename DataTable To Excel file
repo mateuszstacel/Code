@@ -1,0 +1,7 @@
+PM> Install-Package ClosedXML
+
+
+            XLWorkbook wb = new XLWorkbook();
+            System.Data.DataTable dt = LocalDataTable;
+            wb.Worksheets.Add(dt, "test1");
+            wb.SaveAs(@"W:\Contacts\Zishan\Matt\" + "ClenedPhone" + ".xlsx");
