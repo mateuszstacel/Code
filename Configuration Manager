@@ -1,0 +1,6 @@
+system configuration manager nuget
+
+    <add name="FileAlertsEntities" connectionString="Data Source=.......; initial catalog=File_Alerts; user id=......; password=.....;" providerName="System.Data.SqlClient" />
+  </connectionStrings>
+
+string connectionString = ConfigurationManager.ConnectionStrings["FileAlertsEntities"].ToString();
