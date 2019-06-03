@@ -1,0 +1,43 @@
+        using (SqlConnection conn = new SqlConnection(connectionString))
+        {
+
+            conn.Open();
+
+            // 1.  create a command object identifying the stored procedure
+            SqlCommand cmd = new SqlCommand("InsertToMasterActivity", conn);
+
+            // 2. set the command object so it knows to execute a stored procedure
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            // 3. add parameter to command, which will be passed to the stored procedure
+            cmd.Parameters.Add(new SqlParameter("@InterviewerID", InterviewerID));
+
+            cmd.Parameters.Add(new SqlParameter("@InterviewerName", InterviewerName));
+
+            cmd.Parameters.Add(new SqlParameter("@timeNow", timeNow));
+
+            cmd.Parameters.Add(new SqlParameter("@todayDate", todayDate));
+
+            cmd.Parameters.Add(new SqlParameter("@interviewerActivity", interviewerActivity));
+
+            cmd.Parameters.Add(new SqlParameter("@workStation", ComputerName));
+
+            cmd.Parameters.Add(new SqlParameter("@IPAddress", iPAddress));
+
+                if (ProjectNumber != null)
+                {
+                    int projectNum = Convert.ToInt32(ProjectNumber);
+                    cmd.Parameters.Add(new SqlParameter("@ProjectNumber", projectNum));
+                }
+                else
+                {
+                    cmd.Parameters.Add(new SqlParameter("@ProjectNumber", ProjectNumber));
+                }
+
+                // execute the command
+                cmd.ExecuteNonQuery();
+
+
+
+
+            }
