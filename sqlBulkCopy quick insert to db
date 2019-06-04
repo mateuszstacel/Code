@@ -1,0 +1,43 @@
+                       using (var Sqlconnection = new SqlConnection(connectionString))
+                        {
+                            Sqlconnection.Open();
+
+                            using (var sqlBulk = new SqlBulkCopy(Sqlconnection))
+                            {
+                                var columnNames = (from DataColumn x in LocalDataTable.Columns
+                                                   select x.ColumnName).ToArray();
+
+                                
+                                sqlBulk.ColumnMappings.Add(columnNames[0], "Parent_Water_Company");
+                                sqlBulk.ColumnMappings.Add(columnNames[1], "Water_Company_Brand");
+                                sqlBulk.ColumnMappings.Add(columnNames[2], "Account_Number");
+                                sqlBulk.ColumnMappings.Add(columnNames[3], "Name");
+                                sqlBulk.ColumnMappings.Add(columnNames[4], "Telephone_Number");
+                                sqlBulk.ColumnMappings.Add(columnNames[5], "Address");
+                                sqlBulk.ColumnMappings.Add(columnNames[6], "Postcode");
+                                sqlBulk.ColumnMappings.Add(columnNames[7], "Email_Address");
+                                sqlBulk.ColumnMappings.Add(columnNames[8], "High_Level_Reason_For_Contact");
+                                sqlBulk.ColumnMappings.Add(columnNames[9], "Mode_Of_Contact");
+                                sqlBulk.ColumnMappings.Add(columnNames[10], "Date_Of_Contact");
+                                sqlBulk.ColumnMappings.Add(columnNames[11], "Low_Level_Reason_For_Contact");
+                                sqlBulk.ColumnMappings.Add(columnNames[12], "Date_Of_Resolution");
+                                sqlBulk.ColumnMappings.Add(columnNames[13], "Do_Not_Contact_Flag");
+                                sqlBulk.ColumnMappings.Add(columnNames[14], "Complaint");
+                                sqlBulk.ColumnMappings.Add(columnNames[15], "PropertyRef");
+                                sqlBulk.ColumnMappings.Add(columnNames[16], "CustomerReference");
+                              
+
+                                sqlBulk.DestinationTableName = "Data";
+                                sqlBulk.WriteToServer(LocalDataTable);
+                            }
+                            Sqlconnection.Close();
+                        }
+
+                        connection.Close();
+                        LocalDataTable.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                }
