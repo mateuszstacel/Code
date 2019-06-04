@@ -1,0 +1,20 @@
+<form action="Index" method="post" enctype="multipart/form-data">
+    <input type="file" name="files" asp-for="Image" />
+    [httpPost]
+    public async Task<IactionResult> Index(MovieDetails item, List<IFormFile> Image)
+        {
+             foreach ( var item in Image)
+                {
+                     if (item.Length > 0)
+                        {
+                                using ( var stream = new MemoryStream())
+                                {
+                                    await item.CopyToAsync(stream);
+                                    item.Image = stream.ToArray();
+                                }
+                        }
+                }
+    db.sellersItems.Add(item);
+    db.SaveChanges();
+        return View();
+        }
