@@ -1,0 +1,30 @@
+            
+            
+             var LocalDataTable = new DataTable();
+            
+            
+            try
+            {
+                using (var Sqlconnection = new SqlConnection(connectionString))
+                {
+                    Sqlconnection.Open();
+
+                    using (var sqlBulk = new SqlBulkCopy(Sqlconnection))
+                    {
+                        var columnNames = (from DataColumn x in LocalDataTable.Columns
+                                           select x.ColumnName).ToArray();
+
+
+
+                        sqlBulk.BulkCopyTimeout = 5000;
+                        sqlBulk.DestinationTableName = "clean_cmex_31072019ManualMatt";
+                        sqlBulk.WriteToServer(LocalDataTable);
+                    }
+                    Sqlconnection.Close();
+                }
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e);
+            }
