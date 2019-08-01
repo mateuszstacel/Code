@@ -1,0 +1,19 @@
+      
+      
+      List<CleanCmexData> data = batch;
+      
+      string connectionString = "Server=8888; Database = ****; User Id = *****; Password=*******";
+      
+            var LocalDataTable = new DataTable();
+            
+            // read the table structure from the database        
+            using (var adapter = new SqlDataAdapter($"SELECT TOP 0 * FROM clean_cmex_31072019ManualMatt", connectionString))
+            {
+                adapter.Fill(LocalDataTable);
+            };
+
+            // save to datatable
+            using (var reader = ObjectReader.Create(data))
+            {
+                LocalDataTable.Load(reader);
+            }
