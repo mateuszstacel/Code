@@ -1,0 +1,43 @@
+  db.Database.ExecuteSqlCommand($"TRUNCATE TABLE {cleandmexTableName}");
+  
+  private static void SaveCleanData(List<cleanDmexData> batch, string cleanDmexTableName)
+        {
+
+            List<cleanDmexData> data = batch;
+
+            var LocalDataTable = new DataTable();
+            // read the table structure from the database
+            using (var adapter = new SqlDataAdapter($"SELECT TOP 0 * FROM {cleanDmexTableName}", connectionString))
+            {
+                adapter.Fill(LocalDataTable);
+            };
+
+            using (var reader = ObjectReader.Create(data))
+            {
+                LocalDataTable.Load(reader);
+            }
+
+            try
+            {
+                using (var Sqlconnection = new SqlConnection(connectionString))
+                {
+                    Sqlconnection.Open();
+
+                    using (var sqlBulk = new SqlBulkCopy(Sqlconnection))
+                    {
+                        var columnNames = (from DataColumn x in LocalDataTable.Columns
+                                           select x.ColumnName).ToArray();
+
+                        sqlBulk.BulkCopyTimeout = 5000;
+                        sqlBulk.DestinationTableName = cleanDmexTableName;
+                        sqlBulk.WriteToServer(LocalDataTable);
+                    }
+                    Sqlconnection.Close();
+                }
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e);
+            }
+        }
