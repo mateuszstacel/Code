@@ -1,0 +1,83 @@
+
+
+        private static List<Anglian6MonthRemovals> DmexAnglian6MonthsRemovals()
+        {
+
+
+    //1 Create an OleDBConnection
+            OleDbConnection DBConnection = new OleDbConnection();
+            //3 Create a local data table to hold the values of access table
+            DataTable LocalDataTable = new DataTable();
+
+            string conn = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=W:\Contacts\Dawn-June\Water\1671 - Anglian D-Mex\1671.accdb";
+
+
+            using (OleDbConnection connection = new OleDbConnection(conn))
+            {
+                try
+                {
+                    string query = "SELECT ImportID, [Customer firm] as CompanyName, RespondentName, [Site address] as Site, TelephoneNumber1, TelephoneNumber2, Use FROM Removals_6months WHERE Use = 1";
+                    OleDbCommand cmd = new OleDbCommand(query, connection);
+                    connection.Open();
+                    OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                    adapter.Fill(LocalDataTable);
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
+
+            DBConnection.Close();
+
+            List<Anglian6MonthRemovals> removals = ConvertDataTable<Anglian6MonthRemovals>(LocalDataTable);
+
+
+            return removals;
+
+        }
+
+
+
+
+
+   private static List<T> ConvertDataTable<T>(DataTable dt)
+        {
+            List<T> data = new List<T>();
+            foreach (DataRow row in dt.Rows)
+            {
+                T item = GetItem<T>(row);
+                data.Add(item);
+            }
+            return data;
+        }
+        private static T GetItem<T>(DataRow dr)
+        {
+            Type temp = typeof(T);
+            T obj = Activator.CreateInstance<T>();
+
+            foreach (DataColumn column in dr.Table.Columns)
+            {
+                foreach (PropertyInfo pro in temp.GetProperties())
+                {
+                    if (pro.Name == column.ColumnName)
+
+                        if (!String.IsNullOrEmpty(dr[column.ColumnName].ToString()))
+                        {
+                            pro.SetValue(obj, dr[column.ColumnName]);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                    else
+                    {
+                        continue;
+                    }
+
+                }
+            }
+            return obj;
+        }
