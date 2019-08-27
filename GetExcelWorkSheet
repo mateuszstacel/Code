@@ -1,0 +1,20 @@
+        private static string GetExcelWorkSheet( select_confirmitRecords_files confirmitRecordingFiles)
+        {
+            Microsoft.Office.Interop.Excel.Application ExcelObj = new Microsoft.Office.Interop.Excel.Application();
+
+            Microsoft.Office.Interop.Excel.Workbook theWorkbook = null;
+
+            string strPath = confirmitRecordingFiles.LookupFileLocation;
+
+            theWorkbook = ExcelObj.Workbooks.Open(strPath);
+
+            Microsoft.Office.Interop.Excel.Sheets sheets = theWorkbook.Worksheets;
+
+            // Get the reference of first worksheet. Index start at 1 
+            Microsoft.Office.Interop.Excel.Worksheet worksheet = (Microsoft.Office.Interop.Excel.Worksheet)sheets.get_Item(1);
+
+            // Get the name of worksheet.
+            string strWorksheetName = worksheet.Name; 
+
+            return strWorksheetName;
+        }
