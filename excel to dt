@@ -1,0 +1,54 @@
+        public static DataTable importExceltoDatatable(string filepath)
+        {
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+
+            using (var stream = File.Open(filepath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                // Auto-detect format, supports:
+                //  - Binary Excel files (2.0-2003 format; *.xls)
+                //  - OpenXml Excel files (2007 format; *.xlsx)
+                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                {
+                    // Choose one of either 1 or 2:
+
+                    // 1. Use the reader methods
+                    do
+                    {
+                        while (reader.Read())
+                        {
+                            // reader.GetDouble(0);
+                        }
+                    } while (reader.NextResult());
+
+                    // 2. Use the AsDataSet extension method
+                    ds = reader.AsDataSet(new ExcelDataSetConfiguration()
+                    {
+                        // Gets or sets a value indicating whether to set the DataColumn.DataType 
+                        // property in a second pass.
+                        UseColumnDataType = true,
+
+                        // Gets or sets a callback to determine whether to include the current sheet
+                        // in the DataSet. Called once per sheet before ConfigureDataTable.
+                        FilterSheet = (tableReader, sheetIndex) => true,
+
+                        // Gets or sets a callback to obtain configuration options for a DataTable. 
+                        ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration()
+                        {
+                            // Gets or sets a value indicating the prefix of generated column names.
+                            EmptyColumnNamePrefix = "Column",
+
+                            // Gets or sets a value indicating whether to use a row from the 
+                            // data as column names.
+                            UseHeaderRow = true,
+                        }
+                    });
+                    dt = ds.Tables[0];
+
+                    // The result of each spreadsheet is in result.Tables
+                }
+            }
+
+
+            return dt;
+        }
