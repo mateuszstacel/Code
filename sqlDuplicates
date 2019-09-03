@@ -1,0 +1,48 @@
+         string dedupByTelephoneNumber = $@"WITH duptelephone 
+                                                     AS (SELECT id, 
+                                                                Row_number() 
+                                                                  OVER( 
+                                                                    partition BY telephonenumber 
+                                                                    ORDER BY id) AS [rank] 
+                                                         FROM   {db.cleanCmexTableName} 
+                                                         WHERE  telephonenumber IS NOT NULL 
+                                                                AND telephonenumber != '0' 
+                                                                AND ( exclusion IS NULL 
+                                                                       OR exclusion > 1 )) 
+                                                UPDATE {db.cleanCmexTableName} 
+                                                SET    exclusion = 1, 
+                                                       exclusionreason = 'Duplicate telephone number' 
+                                                WHERE  id IN(SELECT id 
+                                                             FROM   duptelephone 
+                                                             WHERE  [rank] > 1) ";
+                                                             
+                                                             
+                                                             
+                                                             
+                                                             
+                                                             
+                                                             
+                                                             ------------------------
+            string dedupByNamePostCodeTel = $@"WITH dupbysoundexnamepostcodetelephone 
+                                                         AS (SELECT id, 
+                                                                    Row_number() 
+                                                                      OVER( 
+                                                                        partition BY soundexrespondentname, postcodeclean, 
+                                                                      telephonenumber 
+                                                                        ORDER BY id) AS [rank] 
+                                                             FROM   {db.cleanCmexTableName} 
+                                                             WHERE  ( exclusion IS NULL 
+                                                                       OR exclusion > 1 ) 
+                                                                    AND soundexrespondentname IS NOT NULL 
+                                                                    AND soundexrespondentname != '' 
+                                                                    AND postcodeclean IS NOT NULL 
+                                                                    AND postcodeclean != 'x' 
+                                                                    AND telephonenumber IS NOT NULL 
+                                                                    AND telephonenumber != '0') 
+                                                    UPDATE {db.cleanCmexTableName} 
+                                                    SET    exclusion = 1, 
+                                                           exclusionreason = 
+                                                           'Duplicate respondent name soundex, postcode and telephone' 
+                                                    WHERE  id IN(SELECT id 
+                                                                 FROM   dupbysoundexnamepostcodetelephone 
+                                                                 WHERE  [rank] > 1) ";
