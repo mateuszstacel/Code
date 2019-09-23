@@ -1,0 +1,10 @@
+/**
+       * @Y: Generic type of return value
+       **/
+        private static Y MattsCaster<Y>(dynamic source)
+        {
+            // Convert source to json
+            string asJso = JsonConvert.SerializeObject(source);
+            // cast json to generic return type
+            return JsonConvert.DeserializeObject<Y>(asJso);
+        }
