@@ -1,0 +1,34 @@
+declare @BackupDbName nvarchar(max) = 'DBNAme';
+ -- replace '
+ set @BackupDbName = REPLACE(@BackupDbName, '''', '''');
+ ---GET TABLES TO PROCESS
+ declare @tables table( id int identity(1,1), tableName nvarchar(max)); 
+ insert into @tables (tableName)
+ select name  FROM sys.tables where name not in ('AuditLogs')
+ 
+
+ ---PREPARE VARAIBLES TO TRACK A LOOP
+ declare @processingID int = 1;
+ declare @totalToProcess int = (select count(*)  FROM @tables);
+ 
+ ---PROCESS COPY OF ALL VALID TABLES
+while @processingID <= @totalToProcess
+begin
+  
+  --Get table name
+
+  -- replace special characters from table name e.g. test's
+ declare @currentTableName nvarchar(max) = (select tableName from @tables where id = @processingID);
+
+ -- replace '
+ set @currentTableName = REPLACE(@currentTableName, '''', '''');
+
+ --Prepare commands to delete table and recreate with new data
+ declare @dropTable nvarchar(max) = ' Drop table [' + @BackupDbName +'].dbo.[' + @currentTableName + ']';
+ declare @copyTable nvarchar(max) = '  Select * into [' + @BackupDbName+ '].dbo.[' + @currentTableName + '] from [' + @currentTableName + ']';
+
+EXEC (@dropTable)
+EXEC (@copyTable)
+
+ set @processingID = @processingID + 1;
+end
